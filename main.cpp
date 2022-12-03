@@ -1,31 +1,40 @@
-#include <iostream>
 #include "test.h"
 #include "user.h"
 
+void takeTest() {
 
+}
+
+void showStatistics(Test* t) {
+
+}
+
+void showStatistics() {
+
+}
 
 int main(int argc, char** argv) {
 
-	char name[NAME_SIZE];
-	char surname[SURNAME_SIZE];
-	char gender;
-	uint8_t age;
-
-	printf("Vase jmeno: ");
-	scanf_s("%s", &name, (unsigned int)sizeof(name));
-	printf("Vase prijmeni: ");
-	scanf_s("%s", &surname, (unsigned int)sizeof(surname));
-	printf("Vas vek: ");
-	scanf_s(" %hhu", &age);
-	printf("Vase pohlavi(m/z): ");
-	scanf_s(" %c", &gender, (unsigned int)sizeof(char));
-
-	User user(name, surname, gender, age);
+	User user;
 	uint8_t userInput;
 
-	do
-	{
-		printf("0 - ukoncit program | 1 - spustit test | 2 - zobrazit statistiky\n>");
+	do {
+		printf("1 - spustit test | 2 - zobrazit statistiky | 3 - konec\n>");
 		scanf_s(" %hhu", &userInput);
-	} while (userInput);
+
+		switch (userInput) {
+		case 1:
+			takeTest();
+			break;
+		case 2:
+			showStatistics();
+			break;
+		case 3:
+			exit(0);
+			break;
+		default:
+			printf("neplatna volba!\n\n");
+		}
+
+	} while (true);
 }
