@@ -1,25 +1,21 @@
 #pragma once
+#include <cstdlib>
+#include <cstdio>
+#include <cstdint>
+#include "statistics.h"
 
 typedef struct Test {
+	void startTest(uint8_t& testIndex);
 	
-	enum Subject {
-		NETWORKING,
-		LAW,
-		CRYPTOGRAPHY,
-		PROGRAMMING,
-	};
 
-	const char* testPath[4] = { 
+private:
+	bool openTest(uint8_t& index);
+	void closeTest();
+	FILE* test;
+	const char* testPaths[4] = {
 		"tests/networking",
-		"tests/lew",
+		"tests/law",
 		"tests/cryptography",
-		"tests/programming" 
+		"tests/programming"
 	};
-
-	bool loadTest() {
-		FILE* test;
-	}
-
-
-
 };
