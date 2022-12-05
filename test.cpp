@@ -30,9 +30,10 @@ void Test::startTest(uint8_t& testIndex)
 
     while (!testEnd)
     {
+        memset(userInp, 0, maxUserInputLength);
         currentQuestion = &questions[questionIndex];
         system("cls");
-        printf("NAPOVEDA:\n     '+' = dalsi otazka\n     '-' = predchozi otazka\n     '*' = ukoncit test\n\n");
+        printf("NAPOVEDA:\n     '+' = dalsi otazka\n     '-' = predchozi otazka\n     '*' = odevzdat a ukoncit test\n     '/' = ukoncit test\n\n");
         printf("===============================================================================================================\n\n");
         printf("%s\n\n", currentQuestion->question);
         if (currentQuestion->answersTotal)
@@ -42,6 +43,12 @@ void Test::startTest(uint8_t& testIndex)
             printf("\n");
         }
         printf("===============================================================================================================\n\n");
+
+        if (currentQuestion->answered == true)
+        {
+            printf("Zaznamenana odpoved('!' pro zruseni odpovedi): %s\n\n", currentQuestion->userAnswer);
+        }
+
         if (currentQuestion->answerHint)
             printf("%s:", currentQuestion->answerHint);
         else
@@ -52,6 +59,21 @@ void Test::startTest(uint8_t& testIndex)
     }
 }
 
+Test::~Test()
+{
+    for (int i = 0; i < numOfQuestions; i++)
+    {
+        free(questions[i].question);
+        free(questions[i].correctAnswerNUMTXT);
+        free(questions[i].answerHint);
+        free(questions[i].userAnswer);
+        for (int j = 0; j < questions[i].answersTotal; j++)
+            free(questions[i].answers[j]);
+        free(questions[i].answers);
+    }
+    free(questions);
+}
+
 void Test::processUserInput(char* input)
 {
     if (input)
@@ -60,25 +82,90 @@ void Test::processUserInput(char* input)
         {
             switch (input[0])
             {
+                //dalsi otazka
             case '+':
                 if (questionIndex < numOfQuestions - 1)
                     questionIndex++;
                 else
                     questionIndex = 0;
                 break;
+                //predchozi otazka
             case '-':
                 if (questionIndex > 0)
                     questionIndex--;
                 else
                     questionIndex = numOfQuestions - 1;
                 break;
+                //ukoncit test a odevzdat
             case '*':
                 testEnd = true;
+                saveResult = true;
                 break;
+                //ukoncit test - zrusit pokus
+            case '/':
+                testEnd = true;
+                break;
+            case '!':
+                if (currentQuestion->answered == true)
+                {
+                    currentQuestion->answered = false;
+                    free(currentQuestion->userAnswer);
+                }
+                break;
+            }
+        }
+        else if (validateAndWriteAnswer(input))
+        {
+            currentQuestion->answered = true;
+            if (questionIndex < numOfQuestions - 1)
+            {
+                questionIndex++;
+                currentQuestion = &questions[questionIndex];
+            }
+            else
+            {
+                printf("\n\nDOSEL/LA JSTE NA KONEC TESTU");
+                getchar();
+                getchar();
             }
         }
     }
 
+}
+
+bool Test::validateAndWriteAnswer(char* input)
+{
+    if (currentQuestion->type == QuestionType::ABC)
+    {
+        if (strlen(input) == 1)
+            if ((input[0] <= ('a' + currentQuestion->answersTotal) && input[0] >= 'a'))
+            {
+                currentQuestion->userAnswer = (char*)malloc(strlen(input));
+                strcpy(currentQuestion->userAnswer, input);
+                return true;
+            }
+    }
+    else if (currentQuestion->type == QuestionType::TXT)
+    {
+        currentQuestion->userAnswer = (char*)malloc(strlen(input));
+        strcpy(currentQuestion->userAnswer, input);
+        return true;
+    }
+    else if (currentQuestion->type == QuestionType::NUM)
+    {
+        int i = 0;
+        while (input[i] != '\0')
+        {
+            if (!isdigit(input[i]))
+                return false;
+        }
+        currentQuestion->userAnswer = (char*)malloc(strlen(input));
+        strcpy(currentQuestion->userAnswer, input);
+        return true;
+
+    }
+
+    return false;
 }
 
 bool Test::openTest(uint8_t& index)

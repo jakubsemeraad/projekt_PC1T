@@ -8,11 +8,12 @@ enum QuestionType
 
 typedef struct Question 
 {
+	bool answered = false;
 	QuestionType type = QuestionType::NONE;
 	char* question = NULL;
 	int answersTotal = 0;
 
-	union 
+	union
 	{
 		char correctAnswerABC;
 		char* correctAnswerNUMTXT;
@@ -29,14 +30,16 @@ typedef struct Question
 typedef struct Test 
 {
 	void startTest(uint8_t& testIndex);
-
+	~Test();
 private:
 	bool openTest(uint8_t& index);
 	void loadQuestions(Question* questions);
 	void closeTest();
 	void processFileInput(char* type, char* value);
 	void processUserInput(char* input);
+	bool validateAndWriteAnswer(char* input);
 	bool testEnd = false;
+	bool saveResult = false;
 	QuestionType evaluateQuestionType(char* value);
 	FILE* test = NULL;
 	const char* testPaths[4] = 

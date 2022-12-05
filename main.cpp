@@ -18,6 +18,7 @@ void takeTest()
 			test.startTest(userInput);
 			Statistics::showTestResult(test);
 			Statistics::writeTestResult(test);
+
 		}
 		else if (userInput == 5) 
 		{
