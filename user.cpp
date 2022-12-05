@@ -1,13 +1,13 @@
 #include "user.h"
 
 User::User() {
-	printf("Vase jmeno: ");
+	printf("jmeno: ");
 	scanf_s("%s", &name, (unsigned int)sizeof(name));
-	printf("Vase prijmeni: ");
+	printf("prijmeni: ");
 	scanf_s("%s", &surname, (unsigned int)sizeof(surname));
-	printf("Vas vek: ");
+	printf("vek: ");
 	scanf_s(" %hhu", &age);
-	printf("Vase pohlavi(m/z): ");
+	printf("pohlavi(m/z): ");
 	scanf_s(" %c", &gender, (unsigned int)sizeof(char));
 }
 
