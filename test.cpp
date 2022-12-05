@@ -53,10 +53,8 @@ void Test::processInput(char* type, char* value){
     }
     else if (!strcmp(type, "question")) {
         if (value) {
-            system("cls");
-            printf("===============================================================================================================\n\n");
-            printf("Otazka:   %s\n\n", value);
-            printf("===============================================================================================================\n\n");
+            currentQuestion->question = (char*)malloc(strlen(value));
+            strcpy(currentQuestion->question, value);
         }
     }
     else if (strlen(type) == 1) {

@@ -1,12 +1,18 @@
 #pragma once
 #include "headers.h"
 
-enum QuestionType { NONE, ABC, TXT };
+enum QuestionType { NONE, ABC, TXT, NUM };
 
 typedef struct Question {
 	QuestionType type;
 	char* question;
-	char* correctAnswer;
+
+	union {
+		char correctAnswerC;
+		char* correctAnswerCp;
+		int correctAnswerI;
+	};
+
 	union {
 		char** answers;
 	};
