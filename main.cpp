@@ -3,7 +3,7 @@
 uint8_t userInput;
 
 void takeTest() {
-	printf("Obor testu\n    0 - Pocitacove site | 1 - pravo | 2 - kryptografie | 3 - programovani | 4 - zpet\n>");
+	printf("Obor testu\n    0 - programovani | 1 - pravo | 2 - kryptografie | 3 - pocitacove site | 4 - zpet\n>");
 
 	do {
 		scanf_s(" %hhu", &userInput);
@@ -12,6 +12,7 @@ void takeTest() {
 			Test t;
 			t.startTest(userInput);
 			Statistics::showTestResult(t);
+			Statistics::writeTestResult(t);
 		}
 
 	} while (userInput < 0 || userInput > 3);

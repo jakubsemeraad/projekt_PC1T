@@ -3,16 +3,16 @@
 
 typedef struct Test {
 	void startTest(uint8_t& testIndex);
-	
 
+	enum TestType { ABC, TXT };
 private:
 	bool openTest(uint8_t& index);
 	void closeTest();
-	FILE* test;
+	FILE* test = NULL;
 	const char* testPaths[4] = {
-		"tests/networking",
+		"tests/programming",
 		"tests/law",
 		"tests/cryptography",
-		"tests/programming"
+		"tests/networking"
 	};
 };

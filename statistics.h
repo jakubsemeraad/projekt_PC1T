@@ -13,4 +13,8 @@ typedef struct TestResults {
 struct Statistics {
 	static void showTestResult(struct Test& test);
 	static void showStatistics();
+	static void writeTestResult(struct Test& test);
+
+private:
+	FILE* statsFile = NULL;
 };
