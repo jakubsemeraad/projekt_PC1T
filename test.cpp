@@ -23,7 +23,31 @@ void Test::startTest(uint8_t& testIndex)
         closeTest();
     }
 
-    
+
+    const uint32_t maxUserInputLength = 128;
+    char userInputStr[maxUserInputLength];
+
+
+    while (!testEnd)
+    {
+        system("cls");
+        printf("NAPOVEDA:\n     '+' = dalsi otazka\n     '-' = predchozi otazka\n     '*' = ukoncit test\n\n");
+        printf("===============================================================================================================\n\n");
+        printf("%s\n\n", currentQuestion->question);
+        if (currentQuestion->answersTotal)
+        {
+            for (int i = 0; i < currentQuestion->answersTotal; i++)
+                printf("%c - %s\n", (char)('a' + i), currentQuestion->answers[i]);
+            printf("\n");
+        }
+        printf("===============================================================================================================\n\n");
+        if (currentQuestion->answerHint)
+            printf("%s:", currentQuestion->answerHint);
+        else
+            printf(":");
+
+        scanf_s(" %s", &userInputStr);
+    }
 }
 
 bool Test::openTest(uint8_t& index)
@@ -70,7 +94,6 @@ void Test::processInput(char* type, char* value){
     }
     else if (!strcmp(type, "question")) 
     {
-
          currentQuestion->question = (char*)malloc(strlen(value));
          if(currentQuestion->question)
              strcpy(currentQuestion->question, value);
@@ -89,6 +112,7 @@ void Test::processInput(char* type, char* value){
              {
                  currentQuestion->answers[i] = (char*)malloc(strlen(value));
                  strcpy(currentQuestion->answers[i], value);
+                 break;
              }
     }
     else if (!strcmp(type, "answer")) 

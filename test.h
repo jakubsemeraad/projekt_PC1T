@@ -8,9 +8,9 @@ enum QuestionType
 
 typedef struct Question 
 {
-	QuestionType type;
-	char* question;
-	int answersTotal;
+	QuestionType type = QuestionType::NONE;
+	char* question = NULL;
+	int answersTotal = 0;
 
 	union 
 	{
@@ -23,8 +23,8 @@ typedef struct Question
 	{
 		char** answers;
 	};
-	char* answerHint;
-	char* userAnswer;
+	char* answerHint = NULL;
+	char* userAnswer = NULL;
 };
 
 typedef struct Test 
@@ -36,7 +36,7 @@ private:
 	void loadQuestions(Question* questions);
 	void closeTest();
 	void processInput(char* type, char* value);
-
+	bool testEnd = false;
 	QuestionType evaluateQuestionType(char* value);
 	FILE* test = NULL;
 	const char* testPaths[4] = 
@@ -47,8 +47,6 @@ private:
 		"tests/networking.test"
 	};
 
-	static const uint32_t maxUserInputLength = 128;
-	char userInput[maxUserInputLength];
 	static const uint16_t maxFileInputLength = 512;
 	char fileInput[maxFileInputLength];
 	uint32_t questionsTotal = 0;
