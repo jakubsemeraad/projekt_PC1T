@@ -9,7 +9,7 @@ void Test::startTest(uint8_t& testIndex)
             fgets(fileInput, maxFileInputLength, test);
             fileInput[strcspn(fileInput, "\n")] = '\0';
             char* tmp = strtok(fileInput, ":");
-            int numOfQuestions = atoi(strtok(NULL, ":"));
+            numOfQuestions = atoi(strtok(NULL, ":"));
             questions = (Question*)malloc(numOfQuestions * sizeof(Question));
 
             loadQuestions(questions);
@@ -17,7 +17,7 @@ void Test::startTest(uint8_t& testIndex)
             if (questions && numOfQuestions > 0)
             {
                 loadQuestions(questions);
-                currentQuestion = &questions[0];
+                currentQuestion = &questions[questionIndex];
             }
         }
         closeTest();
@@ -25,11 +25,12 @@ void Test::startTest(uint8_t& testIndex)
 
 
     const uint32_t maxUserInputLength = 128;
-    char userInputStr[maxUserInputLength];
+    char userInp[maxUserInputLength];
 
 
     while (!testEnd)
     {
+        currentQuestion = &questions[questionIndex];
         system("cls");
         printf("NAPOVEDA:\n     '+' = dalsi otazka\n     '-' = predchozi otazka\n     '*' = ukoncit test\n\n");
         printf("===============================================================================================================\n\n");
@@ -46,8 +47,38 @@ void Test::startTest(uint8_t& testIndex)
         else
             printf(":");
 
-        scanf_s(" %s", &userInputStr);
+        scanf("%s", userInp);
+        processUserInput(userInp);
     }
+}
+
+void Test::processUserInput(char* input)
+{
+    if (input)
+    {
+        if (strlen(input) == 1 && !isalnum(input[0]))
+        {
+            switch (input[0])
+            {
+            case '+':
+                if (questionIndex < numOfQuestions - 1)
+                    questionIndex++;
+                else
+                    questionIndex = 0;
+                break;
+            case '-':
+                if (questionIndex > 0)
+                    questionIndex--;
+                else
+                    questionIndex = numOfQuestions - 1;
+                break;
+            case '*':
+                testEnd = true;
+                break;
+            }
+        }
+    }
+
 }
 
 bool Test::openTest(uint8_t& index)
@@ -68,7 +99,7 @@ void Test::loadQuestions(Question* questions)
             char* value = strtok(NULL, ":");
 
             if (type && value)
-                processInput(type, value);
+                processFileInput(type, value);
             else if (!strcmp(fileInput, ""))
             {
                 currQuestionIndex++;
@@ -85,7 +116,7 @@ void Test::closeTest()
 		fclose(test);
 }
 
-void Test::processInput(char* type, char* value){
+void Test::processFileInput(char* type, char* value){
 
     if (!strcmp(type, "questiontype")) 
     {
@@ -120,13 +151,11 @@ void Test::processInput(char* type, char* value){
 
          if (currentQuestion->type == QuestionType::ABC)
              strcpy(&currentQuestion->correctAnswerABC, value);
-         else if (currentQuestion->type == QuestionType::TXT) 
+         else if (currentQuestion->type == QuestionType::TXT || currentQuestion->type == QuestionType::NUM)
          {
-             currentQuestion->correctAnswerTXT = (char*)malloc(strlen(value));
-             strcpy(currentQuestion->correctAnswerTXT, value);
+             currentQuestion->correctAnswerNUMTXT = (char*)malloc(strlen(value));
+             strcpy(currentQuestion->correctAnswerNUMTXT, value);
          }
-         else if (currentQuestion->type == QuestionType::NUM)
-             currentQuestion->correctAnswerNUM = atoi(value);
     }
     else if (!strcmp(type, "hint"))
     {

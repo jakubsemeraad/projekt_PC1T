@@ -15,8 +15,7 @@ typedef struct Question
 	union 
 	{
 		char correctAnswerABC;
-		char* correctAnswerTXT;
-		int correctAnswerNUM;
+		char* correctAnswerNUMTXT;
 	};
 
 	union 
@@ -35,7 +34,8 @@ private:
 	bool openTest(uint8_t& index);
 	void loadQuestions(Question* questions);
 	void closeTest();
-	void processInput(char* type, char* value);
+	void processFileInput(char* type, char* value);
+	void processUserInput(char* input);
 	bool testEnd = false;
 	QuestionType evaluateQuestionType(char* value);
 	FILE* test = NULL;
@@ -49,7 +49,8 @@ private:
 
 	static const uint16_t maxFileInputLength = 512;
 	char fileInput[maxFileInputLength];
-	uint32_t questionsTotal = 0;
+	int numOfQuestions = 0;
+	int questionIndex = 0;
 	Question* questions;
 	Question* currentQuestion = NULL;
 };
