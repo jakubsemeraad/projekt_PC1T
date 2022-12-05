@@ -4,7 +4,8 @@
 #define NAME_SIZE 20
 #define SURNAME_SIZE 20
 
-typedef struct User {
+typedef struct User 
+{
 	User();
 	char* getUserData();
 	uint32_t getUserDataSize();

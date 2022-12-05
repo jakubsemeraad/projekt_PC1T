@@ -1,6 +1,7 @@
 #include "user.h"
 
-User::User() {
+User::User() 
+{
 	printf("jmeno: ");
 	scanf_s("%s", &name, (unsigned int)sizeof(name));
 	printf("prijmeni: ");
@@ -11,11 +12,13 @@ User::User() {
 	scanf_s(" %c", &gender, (unsigned int)sizeof(char));
 }
 
-uint32_t User::getUserDataSize(){
+uint32_t User::getUserDataSize()
+{
 	return strlen(name) + 1 + strlen(surname) + 1 + sizeof(gender) + 1 + sizeof(age) + 1;
 }
 
-char* User::getUserData(){
+char* User::getUserData()
+{
 	uint32_t userDataSize = getUserDataSize();
 	char* userData = (char*)malloc(userDataSize);
 	uint32_t offset = 0;
