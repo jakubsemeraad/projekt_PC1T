@@ -7,10 +7,11 @@
 typedef struct User 
 {
 	User();
+	~User();
 	char* getUserData();
 	uint32_t getUserDataSize();
 private:
-
+	char* userData = nullptr;
 	char name[NAME_SIZE];
 	char surname[SURNAME_SIZE];
 	char gender;

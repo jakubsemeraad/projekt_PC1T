@@ -12,6 +12,12 @@ User::User()
 	scanf_s(" %c", &gender, (unsigned int)sizeof(char));
 }
 
+User::~User()
+{
+	if (userData)
+		free(userData);
+}
+
 uint32_t User::getUserDataSize()
 {
 	return strlen(name) + 1 + strlen(surname) + 1 + sizeof(gender) + 1 + sizeof(age) + 1;
@@ -20,7 +26,7 @@ uint32_t User::getUserDataSize()
 char* User::getUserData()
 {
 	uint32_t userDataSize = getUserDataSize();
-	char* userData = (char*)malloc(userDataSize);
+	userData = (char*)malloc(userDataSize + 1);
 	uint32_t offset = 0;
 	char dataSeparator = '/';
 

@@ -10,7 +10,9 @@ void Test::startTest(uint8_t& testIndex)
             fileInput[strcspn(fileInput, "\n")] = '\0';
             char* tmp = strtok(fileInput, ":");
             numOfQuestions = atoi(strtok(NULL, ":"));
-            questions = (Question*)malloc(numOfQuestions * sizeof(Question));
+            questions = (Question*)malloc(numOfQuestions * sizeof(Question) + 1);
+            toFree[toFreeCount++] = questions;
+
 
             loadQuestions(questions);
 
@@ -33,9 +35,9 @@ void Test::startTest(uint8_t& testIndex)
         memset(userInp, 0, maxUserInputLength);
         currentQuestion = &questions[questionIndex];
         system("cls");
-        printf("NAPOVEDA:\n     '+' = dalsi otazka\n     '-' = predchozi otazka\n     '*' = odevzdat a ukoncit test\n     '/' = ukoncit test\n\n");
+        printf("NAPOVEDA:\n     '+' = dalsi otazka\n     '-' = predchozi otazka\n     '*' = odevzdat a ukoncit test\n     '/' = zrusit pokus(ukoncit)\n\n");
         printf("===============================================================================================================\n\n");
-        printf("%s\n\n", currentQuestion->question);
+        printf("%d/%d) %s\n\n", (questionIndex + 1), numOfQuestions, currentQuestion->question);
         if (currentQuestion->answersTotal)
         {
             for (int i = 0; i < currentQuestion->answersTotal; i++)
@@ -55,23 +57,22 @@ void Test::startTest(uint8_t& testIndex)
             printf(":");
 
         scanf("%s", userInp);
+
+        for (int i = 0; userInp[i]; i++) {
+            userInp[i] = tolower(userInp[i]);
+        }
+
         processUserInput(userInp);
     }
 }
 
 Test::~Test()
 {
-    for (int i = 0; i < numOfQuestions; i++)
+    
+    for (int i = 0; i < toFreeCount; i++)
     {
-        free(questions[i].question);
-        free(questions[i].correctAnswerNUMTXT);
-        free(questions[i].answerHint);
-        free(questions[i].userAnswer);
-        for (int j = 0; j < questions[i].answersTotal; j++)
-            free(questions[i].answers[j]);
-        free(questions[i].answers);
+        free(toFree[i]);
     }
-    free(questions);
 }
 
 void Test::processUserInput(char* input)
@@ -110,6 +111,7 @@ void Test::processUserInput(char* input)
                 {
                     currentQuestion->answered = false;
                     free(currentQuestion->userAnswer);
+                    QuestionsAnswered--;
                 }
                 break;
             }
@@ -117,16 +119,11 @@ void Test::processUserInput(char* input)
         else if (validateAndWriteAnswer(input))
         {
             currentQuestion->answered = true;
+            
             if (questionIndex < numOfQuestions - 1)
             {
                 questionIndex++;
                 currentQuestion = &questions[questionIndex];
-            }
-            else
-            {
-                printf("\n\nDOSEL/LA JSTE NA KONEC TESTU");
-                getchar();
-                getchar();
             }
         }
     }
@@ -138,16 +135,16 @@ bool Test::validateAndWriteAnswer(char* input)
     if (currentQuestion->type == QuestionType::ABC)
     {
         if (strlen(input) == 1)
-            if ((input[0] <= ('a' + currentQuestion->answersTotal) && input[0] >= 'a'))
+            if ((input[0] < ('a' + currentQuestion->answersTotal) && input[0] >= 'a'))
             {
-                currentQuestion->userAnswer = (char*)malloc(strlen(input));
+                currentQuestion->userAnswer = (char*)malloc(strlen(input) + 1);
                 strcpy(currentQuestion->userAnswer, input);
                 return true;
             }
     }
     else if (currentQuestion->type == QuestionType::TXT)
     {
-        currentQuestion->userAnswer = (char*)malloc(strlen(input));
+        currentQuestion->userAnswer = (char*)malloc(strlen(input) + 1);
         strcpy(currentQuestion->userAnswer, input);
         return true;
     }
@@ -158,8 +155,9 @@ bool Test::validateAndWriteAnswer(char* input)
         {
             if (!isdigit(input[i]))
                 return false;
+            i++;
         }
-        currentQuestion->userAnswer = (char*)malloc(strlen(input));
+        currentQuestion->userAnswer = (char*)malloc(strlen(input) + 1);
         strcpy(currentQuestion->userAnswer, input);
         return true;
 
@@ -212,14 +210,16 @@ void Test::processFileInput(char* type, char* value){
     }
     else if (!strcmp(type, "question")) 
     {
-         currentQuestion->question = (char*)malloc(strlen(value));
+         currentQuestion->question = (char*)malloc(strlen(value) + 1);
+         toFree[toFreeCount++] = currentQuestion->question;
          if(currentQuestion->question)
              strcpy(currentQuestion->question, value);
     }
     else if (!strcmp(type, "answerstotal")) 
     {
         currentQuestion->answersTotal = atoi(value);
-        currentQuestion->answers = (char**)malloc(currentQuestion->answersTotal * sizeof(char*));
+        currentQuestion->answers = (char**)malloc(currentQuestion->answersTotal * sizeof(char*) + 1);
+        toFree[toFreeCount++] = currentQuestion->answers;
         for (int i = 0; i < currentQuestion->answersTotal; i++)
             currentQuestion->answers[i] = NULL;
     }
@@ -228,7 +228,8 @@ void Test::processFileInput(char* type, char* value){
          for(int i = 0; i < currentQuestion->answersTotal; i++)
              if (currentQuestion->answers[i] == NULL) 
              {
-                 currentQuestion->answers[i] = (char*)malloc(strlen(value));
+                 currentQuestion->answers[i] = (char*)malloc(strlen(value) + 1);
+                 toFree[toFreeCount++] = currentQuestion->answers[i];
                  strcpy(currentQuestion->answers[i], value);
                  break;
              }
@@ -240,13 +241,15 @@ void Test::processFileInput(char* type, char* value){
              strcpy(&currentQuestion->correctAnswerABC, value);
          else if (currentQuestion->type == QuestionType::TXT || currentQuestion->type == QuestionType::NUM)
          {
-             currentQuestion->correctAnswerNUMTXT = (char*)malloc(strlen(value));
+             currentQuestion->correctAnswerNUMTXT = (char*)malloc(strlen(value) + 1);
+             toFree[toFreeCount++] = currentQuestion->correctAnswerNUMTXT;
              strcpy(currentQuestion->correctAnswerNUMTXT, value);
          }
     }
     else if (!strcmp(type, "hint"))
     {
-         currentQuestion->answerHint = (char*)(malloc(strlen(value)));
+         currentQuestion->answerHint = (char*)malloc(strlen(value) + 1);
+         toFree[toFreeCount++] = currentQuestion->answerHint;
          if(currentQuestion->answerHint)
              strcpy(currentQuestion->answerHint, value);
     }

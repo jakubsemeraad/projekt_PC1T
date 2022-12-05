@@ -5,11 +5,17 @@ void Statistics::showTestResult(struct Test& test)
 
 }
 
-void Statistics::showStatistics()
+void Statistics::analyzeTest(struct Test& test)
 {
 
 }
 
-void Statistics::writeTestResult(Test& test)
+void Statistics::writeTestResult(struct Test& test)
 {
+
+}
+
+void Statistics::showStatistics()
+{
+
 }

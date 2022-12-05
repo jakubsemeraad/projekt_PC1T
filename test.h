@@ -10,21 +10,18 @@ typedef struct Question
 {
 	bool answered = false;
 	QuestionType type = QuestionType::NONE;
-	char* question = NULL;
+	char* question = nullptr;
 	int answersTotal = 0;
 
 	union
 	{
 		char correctAnswerABC;
-		char* correctAnswerNUMTXT;
+		char* correctAnswerNUMTXT = nullptr;
 	};
 
-	union 
-	{
-		char** answers;
-	};
-	char* answerHint = NULL;
-	char* userAnswer = NULL;
+	char** answers = nullptr;
+	char* answerHint = nullptr;
+	char* userAnswer = nullptr;
 };
 
 typedef struct Test 
@@ -54,6 +51,9 @@ private:
 	char fileInput[maxFileInputLength];
 	int numOfQuestions = 0;
 	int questionIndex = 0;
-	Question* questions;
-	Question* currentQuestion = NULL;
+	int QuestionsAnswered = 0;
+	Question* questions = nullptr;
+	Question* currentQuestion = nullptr;
+	void* toFree[1024]{ 0 };
+	int toFreeCount = 0;
 };
