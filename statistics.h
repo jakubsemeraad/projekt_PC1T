@@ -1,7 +1,7 @@
 #pragma once
-#include "test.h"
+#include "headers.h"
 
-struct TestResults {
+typedef struct TestResults {
 	uint32_t questionsTotal = 0;
 	uint32_t questionsAnswered = 0;
 	uint32_t correctAnswers = 0;
@@ -10,7 +10,7 @@ struct TestResults {
 
 };
 
-typedef struct Statistics {
-	static void showTestResult(Test& test);
+struct Statistics {
+	static void showTestResult(struct Test& test);
 	static void showStatistics();
 };

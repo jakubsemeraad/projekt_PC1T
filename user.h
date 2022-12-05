@@ -1,8 +1,5 @@
 #pragma once
-#include <stdio.h>
-#include <cstdint>
-#include <string.h>
-#include <stdlib.h>
+#include "headers.h"
 
 #define NAME_SIZE 20
 #define SURNAME_SIZE 20

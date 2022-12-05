@@ -1,7 +1,6 @@
 #include "test.h"
 
-void Test::startTest(uint8_t& testIndex)
-{
+void Test::startTest(uint8_t& testIndex){
 	openTest(testIndex);
 
 
@@ -9,14 +8,12 @@ void Test::startTest(uint8_t& testIndex)
 	closeTest();
 }
 
-bool Test::openTest(uint8_t& index)
-{
+bool Test::openTest(uint8_t& index){
 	test = fopen(testPaths[index], "r");
 	return (test != NULL);
 }
 
-void Test::closeTest()
-{
+void Test::closeTest(){
 	if(test != NULL)
 		fclose(test);
 }

@@ -1,8 +1,5 @@
 #pragma once
-#include <cstdlib>
-#include <cstdio>
-#include <cstdint>
-#include "statistics.h"
+#include "headers.h"
 
 typedef struct Test {
 	void startTest(uint8_t& testIndex);
