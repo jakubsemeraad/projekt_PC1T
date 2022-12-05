@@ -11,18 +11,22 @@ void Test::startTest(uint8_t& testIndex) {
             fgets(fileInput, maxInputLength, test);
             char* t = strtok(fileInput, ":");
             int numOfQuestions = atoi(strtok(NULL, ":"));
+            int currQuestionIndex = 0;
             questions = (Question*)malloc(numOfQuestions * sizeof(Question));
             if (numOfQuestions > 0) 
-                currentQuestion = &questions[0];
+                currentQuestion = &questions[currQuestionIndex];
 
             while (!feof(test)) {
                 if (fgets(fileInput, maxInputLength, test)) {
                     fileInput[strcspn(fileInput, "\n")] = '\0';
                     char* type = strtok(fileInput, ":");
                     char* value = strtok(NULL, ":");
-
-                    if(type)
+                    
+                    if (type)
                         processInput(type, value);
+                    else if (!strcmp(fileInput, ""))
+                        currentQuestion = &questions[++currQuestionIndex];
+                        
                 }
             }
         }
@@ -71,9 +75,9 @@ void Test::processInput(char* type, char* value){
     }
     else if (!strcmp(type, "getuserinput")) {
         if (value)
-            printf("\n%s>", value);
+            printf("\n%s:", value);
         else
-            printf(">");
+            printf(":");
         scanf("%s", userInput);
         currentQuestion->userAnswer = (char*)malloc(strlen(userInput));
         if(currentQuestion->userAnswer)
