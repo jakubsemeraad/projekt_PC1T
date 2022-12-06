@@ -93,12 +93,17 @@ void showStatistics() {
 		}
 	}
 
-	printf("TEST NA PRAVO:     pocet otazek: %d\n     prumerne straveny cas: %.2f sekund\n     prumerny pocet chyb: %.2f\n     prumerny pocet spravnych odpovedni: %.2f\n     prumerny pocet nezodpovezenych otazek: %.2f\n\n===========================================================================================================================\n\n",
+	printf("TEST NA PRAVO:\n     pocet otazek: %d\n     prumerne straveny cas: %.2f sekund\n     prumerny pocet chyb: %.2f\n     prumerny pocet spravnych odpovedni: %.2f\n     prumerny pocet nezodpovezenych otazek: %.2f\n\n===============================================================================================================\n\n",
 		qNla, (laTimeTotal/nLa), (laWrTotal/nLa), (laCorrTotal/nLa), (laNaTotal/nLa));
-	printf("TEST NA KRYPTOGRAFII:     pocet otazek: %d\n     prumerne straveny cas: %.2f sekund\n     prumerny pocet chyb: %.2f\n     prumerny pocet spravnych odpovedni: %.2f\n     prumerny pocet nezodpovezenych otazek: %2.f\n\n====================================================================================================================\n\n",
+	printf("TEST NA KRYPTOGRAFII:\n     pocet otazek: %d\n     prumerne straveny cas: %.2f sekund\n     prumerny pocet chyb: %.2f\n     prumerny pocet spravnych odpovedni: %.2f\n     prumerny pocet nezodpovezenych otazek: %2.f\n\n===============================================================================================================\n\n",
 		qNcr, (crTimeTotal / nCr), (crWrTotal / nCr), (crCorrTotal / nCr), (crNaTotal / nCr));
-	printf("TEST NA PROGRAMOVANI:     pocet otazek: %d\n     prumerne straveny cas: %.2f sekund\n     prumerny pocet chyb: %.2f\n     prumerny pocet spravnych odpovedni: %.2f\n     prumerny pocet nezodpovezenych otazek: %2.f\n\n====================================================================================================================\n\n",
+	printf("TEST NA PROGRAMOVANI:\n     pocet otazek: %d\n     prumerne straveny cas: %.2f sekund\n     prumerny pocet chyb: %.2f\n     prumerny pocet spravnych odpovedni: %.2f\n     prumerny pocet nezodpovezenych otazek: %2.f\n\n===============================================================================================================\n\n",
 		qNpr, (prTimeTotal / nPr), (prWrTotal / nPr), (prCorrTotal / nPr), (prNaTotal / nPr));
+
+	printf("\n(stisknutim ENTER pokracovat)\n");
+	getchar();
+	getchar();
+	
 }
 
 int main(int argc, char** argv) 
