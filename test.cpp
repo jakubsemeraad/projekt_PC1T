@@ -30,6 +30,9 @@ void Test::startTest(uint8_t& testIndex)
     char userInp[maxUserInputLength];
 
 
+    time_t start, stop;
+
+    start = time(NULL);
     while (!testEnd)
     {
         memset(userInp, 0, maxUserInputLength);
@@ -64,6 +67,9 @@ void Test::startTest(uint8_t& testIndex)
 
         processUserInput(userInp);
     }
+    stop = time(NULL);
+    timeElapsed = stop - start;
+
 }
 
 Test::~Test()
@@ -111,7 +117,6 @@ void Test::processUserInput(char* input)
                 {
                     currentQuestion->answered = false;
                     free(currentQuestion->userAnswer);
-                    QuestionsAnswered--;
                 }
                 break;
             }

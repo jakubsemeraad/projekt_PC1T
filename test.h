@@ -36,24 +36,25 @@ private:
 	void processUserInput(char* input);
 	bool validateAndWriteAnswer(char* input);
 	bool testEnd = false;
-	bool saveResult = false;
 	QuestionType evaluateQuestionType(char* value);
 	FILE* test = NULL;
 	const char* testPaths[4] = 
 	{
 		"tests/programming.test",
 		"tests/law.test",
-		"tests/cryptography.test",
-		"tests/networking.test"
+		"tests/cryptography.test"
 	};
 
 	static const uint16_t maxFileInputLength = 512;
 	char fileInput[maxFileInputLength];
-	int numOfQuestions = 0;
 	int questionIndex = 0;
-	int QuestionsAnswered = 0;
-	Question* questions = nullptr;
 	Question* currentQuestion = nullptr;
 	void* toFree[1024]{ 0 };
 	int toFreeCount = 0;
+
+public:
+	Question* questions = nullptr;
+	uint32_t timeElapsed = 0;
+	int numOfQuestions = 0;
+	bool saveResult = false;
 };

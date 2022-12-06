@@ -8,22 +8,26 @@ void takeTest()
 	{
 		system("cls");
 		printf("===============================================================================================================\n\n");
-		printf("Obor testu:   1 - programovani | 2 - pravo | 3 - kryptografie | 4 - pocitacove site | 5 - zpet\n\n");
+		printf("Obor testu:   1 - programovani | 2 - pravo | 3 - kryptografie | 4 - zpet\n\n");
 		printf("===============================================================================================================\n\n>");
 
 
 		scanf(" %hhu", &userInput);
 	
-		if (userInput >= 1 && userInput <= 4) 
+		if (userInput >= 1 && userInput <= 3) 
 		{
 			Test test;
 			userInput -= 1;
 			test.startTest(userInput);
-			Statistics::showTestResult(test);
-			Statistics::writeTestResult(test);
-
+			if (test.saveResult)
+			{
+				system("cls");
+				Statistics::showTestResult(test);
+				Statistics::writeTestResult(test);
+			}
+			break;
 		}
-		else if (userInput == 5) 
+		else if (userInput == 4) 
 		{
 			system("cls");
 			break;
@@ -48,6 +52,7 @@ int main(int argc, char** argv)
 	system("cls");
 	do 
 	{
+		system("cls");
 		printf("===============================================================================================================\n\n");
 		printf("   1 - spustit test | 2 - zobrazit statistiky | 3 - konec\n\n");
 		printf("===============================================================================================================\n\n>");
