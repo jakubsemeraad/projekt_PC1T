@@ -19,12 +19,7 @@ void takeTest()
 			Test test;
 			userInput -= 1;
 			test.startTest(userInput);
-			if (test.saveResult)
-			{
-				system("cls");
-				Statistics::showTestResult(test);
-				Statistics::writeTestResult(test);
-			}
+			system("cls");
 			break;
 		}
 		else if (userInput == 4) 
@@ -42,7 +37,7 @@ void takeTest()
 }
 
 void showStatistics() {
-	Statistics::showStatistics();
+	
 }
 
 int main(int argc, char** argv) 

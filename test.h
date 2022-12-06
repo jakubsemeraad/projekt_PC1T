@@ -52,9 +52,11 @@ private:
 	void* toFree[1024]{ 0 };
 	int toFreeCount = 0;
 
-public:
 	Question* questions = nullptr;
 	uint32_t timeElapsed = 0;
 	int numOfQuestions = 0;
 	bool saveResult = false;
+
+	int correct = 0;
+	int wrong = 0;
 };

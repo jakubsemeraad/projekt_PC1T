@@ -70,6 +70,30 @@ void Test::startTest(uint8_t& testIndex)
     stop = time(NULL);
     timeElapsed = stop - start;
 
+
+
+
+    if (saveResult)
+    {
+        system("cls");
+        printf("===============================================================================================================\n\n");
+        printf("Vysledek:\n\n");
+        printf("    Pocet otazek: %d\n", numOfQuestions);
+        printf("    Cas testu(s): %d\n", timeElapsed);
+        printf("    Spravne odpovedi: %d\n", correct);
+        printf("    Spatne odpovedi: %d\n", wrong);
+        printf("    Nezodpovezeno: %d\n\n", (numOfQuestions - wrong - correct));
+        printf("===============================================================================================================\n\n(stisknutim ENTER pokracovat)");
+        getchar();
+        getchar();
+
+        /*FILE* fptr = fopen("tests_statistics/stats.st", "a");
+        for (int i = 0; i < numOfQuestions; i++)
+        {
+            
+        }*/
+    }
+
 }
 
 Test::~Test()
@@ -116,6 +140,21 @@ void Test::processUserInput(char* input)
                 if (currentQuestion->answered == true)
                 {
                     currentQuestion->answered = false;
+                    if (strlen(currentQuestion->userAnswer) == 1)
+                    {
+                        if (currentQuestion->userAnswer[0] == currentQuestion->correctAnswerABC)
+                            correct--;
+                        else
+                            wrong--;
+                    }
+                    else
+                    {
+                        if (!strcmp(currentQuestion->userAnswer, currentQuestion->correctAnswerNUMTXT))
+                            correct--;
+                        else
+                            wrong--;
+                    }
+
                     free(currentQuestion->userAnswer);
                 }
                 break;
@@ -144,6 +183,15 @@ bool Test::validateAndWriteAnswer(char* input)
             {
                 currentQuestion->userAnswer = (char*)malloc(strlen(input) + 1);
                 strcpy(currentQuestion->userAnswer, input);
+
+                if (strlen(currentQuestion->userAnswer) == 1)
+                {
+                    if (currentQuestion->userAnswer[0] == currentQuestion->correctAnswerABC)
+                        correct++;
+                    else
+                        wrong++;
+                }
+
                 return true;
             }
     }
@@ -151,6 +199,10 @@ bool Test::validateAndWriteAnswer(char* input)
     {
         currentQuestion->userAnswer = (char*)malloc(strlen(input) + 1);
         strcpy(currentQuestion->userAnswer, input);
+        if (!strcmp(currentQuestion->userAnswer, currentQuestion->correctAnswerNUMTXT))
+            correct++;
+        else
+            wrong++;
         return true;
     }
     else if (currentQuestion->type == QuestionType::NUM)
@@ -164,6 +216,10 @@ bool Test::validateAndWriteAnswer(char* input)
         }
         currentQuestion->userAnswer = (char*)malloc(strlen(input) + 1);
         strcpy(currentQuestion->userAnswer, input);
+        if (!strcmp(currentQuestion->userAnswer, currentQuestion->correctAnswerNUMTXT))
+            correct++;
+        else
+            wrong++;
         return true;
 
     }

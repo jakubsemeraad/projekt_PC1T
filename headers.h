@@ -8,5 +8,4 @@
 #include <time.h>
 #include <string.h>
 #include "test.h"
-#include "statistics.h"
 #include "user.h"
