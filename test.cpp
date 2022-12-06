@@ -87,11 +87,11 @@ void Test::startTest(uint8_t& testIndex)
         getchar();
         getchar();
 
-        /*FILE* fptr = fopen("tests_statistics/stats.st", "a");
-        for (int i = 0; i < numOfQuestions; i++)
-        {
-            
-        }*/
+        FILE* fptr = fopen("tests_statistics/stats.st", "a");
+
+        fprintf(fptr, "\n%s;%d;%d;%d;%d;%d", testPaths[testIndex], numOfQuestions, timeElapsed, correct, wrong, (numOfQuestions - wrong - correct));
+
+        fclose(fptr);
     }
 
 }

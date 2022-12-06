@@ -37,7 +37,68 @@ void takeTest()
 }
 
 void showStatistics() {
+	FILE* f = fopen("tests_statistics/stats.st", "r");
+	char readBuf[512];
 	
+	float nCr = 0 , nPr = 0, nLa = 0;
+	int crTimeTotal = 0, crCorrTotal = 0, crWrTotal = 0, crNaTotal = 0;
+	int prTimeTotal = 0, prCorrTotal = 0, prWrTotal = 0, prNaTotal = 0;
+	int laTimeTotal = 0, laCorrTotal = 0, laWrTotal = 0, laNaTotal = 0;
+	int qNcr = 0, qNla = 0, qNpr = 0;
+
+	while (!feof(f))
+	{
+		fgets(readBuf, 512, f);
+		
+
+		if (readBuf[0] != '\n')
+		{
+			readBuf[strcspn(readBuf, "\n")] = '\0';
+
+			char* type = strtok(readBuf, ";");
+			int qNum = atoi(strtok(NULL, ";"));
+			int time = atoi(strtok(NULL, ";"));
+			int corr = atoi(strtok(NULL, ";"));
+			int wr = atoi(strtok(NULL, ";"));
+			int na = atoi(strtok(NULL, ";"));
+
+			if (!strcmp(type, "tests/programming.test"))
+			{
+				nPr++;
+				qNpr = qNum;
+				prCorrTotal += corr;
+				prTimeTotal += time;
+				prWrTotal += wr;
+				prNaTotal += na;
+			}
+			else if (!strcmp(type, "tests/law.test"))
+			{
+				nLa++;
+				qNla = qNum;
+				laCorrTotal += corr;
+				laTimeTotal += time;
+				laWrTotal += wr;
+				laNaTotal += na;
+			}
+			else if (!strcmp(type, "tests/cryptography.test"))
+			{
+				nCr++;
+				qNcr = qNum;
+				crCorrTotal += corr;
+				crTimeTotal += time;
+				crWrTotal += wr;
+				crNaTotal += na;
+			}
+
+		}
+	}
+
+	printf("TEST NA PRAVO:     pocet otazek: %d\n     prumerne straveny cas: %.2f sekund\n     prumerny pocet chyb: %.2f\n     prumerny pocet spravnych odpovedni: %.2f\n     prumerny pocet nezodpovezenych otazek: %.2f\n\n===========================================================================================================================\n\n",
+		qNla, (laTimeTotal/nLa), (laWrTotal/nLa), (laCorrTotal/nLa), (laNaTotal/nLa));
+	printf("TEST NA KRYPTOGRAFII:     pocet otazek: %d\n     prumerne straveny cas: %.2f sekund\n     prumerny pocet chyb: %.2f\n     prumerny pocet spravnych odpovedni: %.2f\n     prumerny pocet nezodpovezenych otazek: %2.f\n\n====================================================================================================================\n\n",
+		qNcr, (crTimeTotal / nCr), (crWrTotal / nCr), (crCorrTotal / nCr), (crNaTotal / nCr));
+	printf("TEST NA PROGRAMOVANI:     pocet otazek: %d\n     prumerne straveny cas: %.2f sekund\n     prumerny pocet chyb: %.2f\n     prumerny pocet spravnych odpovedni: %.2f\n     prumerny pocet nezodpovezenych otazek: %2.f\n\n====================================================================================================================\n\n",
+		qNpr, (prTimeTotal / nPr), (prWrTotal / nPr), (prCorrTotal / nPr), (prNaTotal / nPr));
 }
 
 int main(int argc, char** argv) 
